@@ -22,8 +22,8 @@ A self-designed neural network, written entirely in Python and the NumPy library
     ├── requirements.txt
     ├── testing_custom_data.ipynb
     └── testing_real_data.ipynb
----
 
+---
 ## Usage
 
 ```py
