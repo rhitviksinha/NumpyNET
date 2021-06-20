@@ -1,37 +1,102 @@
-## Welcome to GitHub Pages
+# NumpyNET
 
-You can use the [editor on GitHub](https://github.com/rhitviksinha/NumpyNET/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+A self-designed neural network, written entirely in Python and the NumPy library. Heavily inspired by [Joel Grus' `joelnet`](https://github.com/joelgrus/joelnet/). Check the .ipynb notebooks out for implementation.
+* [testing_real_data](./testing_real_data.ipynb) has a neural network successfully implemented on the [Banknote Authentication Data Set](https://archive.ics.uci.edu/ml/datasets/banknote+authentication).
+* [testing_custom_data](./testing_real_data.ipynb) contains a neural network implemented on the `XOR` logic function. And a custom dataset with an `XOR`-like distribution.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## Repository Distribution
 
-### Markdown
+    main
+    ├── dataset/
+    |   └── data_banknote_authentication.txt
+    ├── numpyNET/
+    |   ├── activation.py
+    |   ├── data_loader.py
+    |   ├── error.py
+    |   ├── layers.py
+    |   ├── nn.py
+    |   ├── optimizer.py
+    |   └── train.py
+    ├── README.md
+    ├── requirements.txt
+    ├── testing_custom_data.ipynb
+    └── testing_real_data.ipynb
+---
+## Usage
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+```py
+from numpyNET.nn import Model
+from numpyNET.layers import Dense, Sigmoid
+from numpyNET.optimizer import SGD
+from numpyNET.error import Error, MSE, BinaryCrossEntropy
+from numpyNET.data_loader import BatchIterator
+from numpyNET.train import train, predict
 
-```markdown
-Syntax highlighted code block
+# Designing a Model
+model = Model([
+    Dense(input_size=..., output_size=...),
+    Sigmoid(),
+    Dense(input_size=..., output_size=...),
+    Sigmoid()
+])
 
-# Header 1
-## Header 2
-### Header 3
+# Model Hyperparameters
+num_epochs = ...
+optim = SGD(learn_rate=...)
+batch_size = ...
+err = MSE()
 
-- Bulleted
-- List
+# Training
+train_features = ...
+train_labels = ...
+history = train(
+    model, train_features, train_labels, plotting=True,
+    epochs=num_epochs, optimizer=optim, err=err,
+    iterator=BatchIterator(batch_size=batch_size)
+)
 
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+# Predictions
+unknown_features = ...
+prediction = predict(model, unknown_features)
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+---
+## Layers Implemented in [layers.py](./numpyNET/layers.py)
 
-### Jekyll Themes
+### Dense
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/rhitviksinha/NumpyNET/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+The classic linear layer that takes an `input` matrix and returns its matrix product with a `weight` matrix and a `bias` term added. Each neuron in the `Dense` layer receives `input` from all neurons of its previous layer. *Activations are implemented as separate layers.*
 
-### Support or Contact
+### ReLU *(Activation Layer)*
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+The rectified linear activation function, or `ReLU` activation function, is perhaps the most common function used for hidden layers. In a `ReLU` unit, if the `input` value is negative, then a value `0.0` is obtained, otherwise, the `input` is returned.
+
+### Sigmoid *(Activation Layer)*
+
+Another classic, it applies a `Sigmoid` function to the `input` such that the output is bounded in the interval `(0, 1)`. The larger the `input` (more positive), the closer the output value will be to `1.0`, whereas the smaller the `input` (more negative), the closer the output will be to `0.0`.
+
+### Tanh *(Activation Layer)*
+
+This layer applies a `Tanh` function to the `input`. The output is bounded in the interval `(-1, 1)`. The larger the `input` (more positive), the closer the output value will be to `1.0`, whereas the smaller the `input` (more negative), the closer the output will be to `-1.0`.
+
+---
+## Error Functions Implemented in [error.py](./numpyNET/error.py)
+
+### Binary Cross Entropy Error
+
+*Incomplete.* Might have some issues, as the gradient either explodes, or vanishes to `nan`.
+
+### Mean Absolute Error
+
+*Untested.*
+
+### Mean Squared Error
+
+Implmented. Well tested.
+
+---
+## Optimizers Implemented in [optimzer.py](./numpyNET/optimizer.py)
+
+### Stochastic Gradient Descent
+
+The batch sizes are implemented in [data_loader.py](./numpyNET/data_loader.py). Will work on implementing Momentum / Adagrad / Adam optimizers.
