@@ -1,6 +1,6 @@
 # NumpyNET
 
-A self-designed neural network, written entirely in Python and the NumPy library. Heavily inspired by [Joel Grus' `joelnet`](https://github.com/joelgrus/joelnet/). Check the .ipynb notebooks out for implementation.
+A self-designed neural network, written entirely in Python and the NumPy library. Check the .ipynb notebooks out for implementation.
 
 * [View `testing_real_data.ipynb`](https://nbviewer.jupyter.org/github/rhitviksinha/NumpyNET/blob/main/testing_real_data.ipynb). It has a neural network successfully implemented on the [Banknote Authentication Data Set](https://archive.ics.uci.edu/ml/datasets/banknote+authentication).
 * [View `testing_custom_data.ipynb`](https://nbviewer.jupyter.org/github/rhitviksinha/NumpyNET/blob/main/testing_custom_data.ipynb). It contains a neural network implemented on the `XOR` logic function. And a custom dataset with an `XOR`-like distribution.
